@@ -27,6 +27,10 @@ public class Tarea {
         this.nombre_desc = nombre_desc;
         this.estado = estado;
     }
+    
+    public Tarea(String nombre_desc) {
+        this.nombre_desc = nombre_desc;
+    }
 
     public ObjectId getId() {
         return id;
