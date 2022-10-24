@@ -24,13 +24,13 @@ import com.mongodb.client.MongoCursor;
 public class RepTarea {
     
     MongoCollection<Tarea> tareas = baseDatos.getCollection("Tarea", Tarea.class);
-    List<Tarea> tareasList = new ArrayList<>();
     
     /**
      * Método que regresa una lista de todas las tareas.
      * @return regresa una lista de todas las tareas
      */
     public List<Tarea> consultar() {
+        List<Tarea> tareasList = new ArrayList<>();
         tareas.find().into(tareasList);
         return tareasList;
     }
@@ -57,7 +57,7 @@ public class RepTarea {
      */
     public void actualizar(Tarea tarea){
         tareas.updateOne(Filters.eq("_id", tarea.getId()), 
-                Updates.set("nombre_des",tarea.getEstado()));
+                Updates.set("nombre_desc",tarea.getNombre_desc()));
         tareas.updateOne(Filters.eq("_id", tarea.getId()), 
                 Updates.set("estado",tarea.getEstado()));
     }
@@ -82,9 +82,9 @@ public class RepTarea {
         
         while (cursor.hasNext()) {
             Document document = cursor.next();
-            String n = document.getString("estado");
+            String n = document.getString("nombre_desc");
             
-            Tarea  busqueda = tareas.find(Filters.eq("estado", n)).first();
+            Tarea  busqueda = tareas.find(Filters.eq("nombre_desc", n)).first();
             
             tareasB.add(busqueda);
         }

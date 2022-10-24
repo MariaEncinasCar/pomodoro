@@ -10,12 +10,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.Timer;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import objetos.Tarea;
 import negocio.CtrlTarea;
 import negocio.FabricaNegocios;
@@ -31,6 +33,7 @@ public class menuPomodoro extends javax.swing.JFrame {
      */
     private FabricaNegocios f = new FabricaNegocios();
     private CtrlTarea ctrlTarea = f.getCtrlTarea();
+    private ArrayList<Tarea> listaTareas = (ArrayList<Tarea>) ctrlTarea.consultar();
         String estado = "Pendiente";
         private Timer t;
         private int h, m, s, cs;
@@ -39,7 +42,44 @@ public class menuPomodoro extends javax.swing.JFrame {
     public menuPomodoro() {
         initComponents();
         t = new Timer(10, acciones);
+        actualizaTabla(listaTareas);
         setLocationRelativeTo(this);
+    }
+    
+    /**
+     * Método que actualiza la tabla.
+     */
+    public void actualizaTabla(ArrayList<Tarea> lista) {
+        DefaultTableModel modelo = new DefaultTableModel() {
+
+            @Override
+            public boolean isCellEditable(int row, int colum) {
+                return false;
+            }
+        };
+
+        modelo.addColumn("Tarea");
+
+        tablaConsulta.setModel(modelo);
+
+        String[] datos = new String[1];
+        if (lista != null) {
+            for (Tarea a : lista) {
+                if(dropBusqueda.getSelectedItem().toString().equalsIgnoreCase("Todo")){
+                    datos[0] = String.valueOf(a.getNombre_desc());
+                }else{
+                    if(dropBusqueda.getSelectedItem().toString().equalsIgnoreCase(a.getEstado())){
+                        datos[0] = String.valueOf(a.getNombre_desc());
+                    }
+                }
+                
+                modelo.addRow(datos);
+            }
+        }
+
+        Font fuente = new Font("Arial Rounded MT", Font.BOLD, 14);
+        tablaConsulta.setFont(fuente);
+        tablaConsulta.setModel(modelo);
     }
 
     //Falta hacer que no se puedan repetir las mismas tareas o.o
@@ -116,6 +156,20 @@ public class menuPomodoro extends javax.swing.JFrame {
             }
         }
     }
+    
+    /**
+     * Método que regresa la tarea seleccionada en la tabla.
+     *
+     * @return devuelve la tarea seleccionado
+     */
+    public Tarea seleccionado() {
+        int seleccion = tablaConsulta.getSelectedRow();
+        Tarea tarea = new Tarea();
+        tarea.setId(listaTareas.get(seleccion).getId());
+        tarea.setNombre_desc(listaTareas.get(seleccion).getNombre_desc());
+        tarea.setEstado(listaTareas.get(seleccion).getEstado());
+        return tarea;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -151,11 +205,6 @@ public class menuPomodoro extends javax.swing.JFrame {
 
         txtActividad.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         txtActividad.setBorder(null);
-        txtActividad.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtActividadActionPerformed(evt);
-            }
-        });
         txtActividad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyTyped(java.awt.event.KeyEvent evt) {
                 txtActividadKeyTyped(evt);
@@ -168,11 +217,6 @@ public class menuPomodoro extends javax.swing.JFrame {
         btnTerminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnTerminar.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnTerminar2.png"))); // NOI18N
         btnTerminar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnTerminar2.png"))); // NOI18N
-        btnTerminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTerminarActionPerformed(evt);
-            }
-        });
         getContentPane().add(btnTerminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 540, -1, -1));
 
         btnReiniciar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnRestablecer.png"))); // NOI18N
@@ -242,7 +286,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         dropBusqueda.setBackground(new java.awt.Color(255, 51, 51));
         dropBusqueda.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         dropBusqueda.setForeground(new java.awt.Color(255, 255, 255));
-        dropBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pendientes", "Acabadas" }));
+        dropBusqueda.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todo", "Pendiente", "En progreso", "Terminada" }));
         dropBusqueda.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 dropBusquedaActionPerformed(evt);
@@ -272,14 +316,6 @@ public class menuPomodoro extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtActividadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtActividadActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtActividadActionPerformed
-
-    private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
-
-    }//GEN-LAST:event_btnTerminarActionPerformed
 
     private void btnReiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReiniciarActionPerformed
         if (t.isRunning()) {
@@ -313,24 +349,29 @@ public class menuPomodoro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void tablaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaConsultaMouseClicked
-
+        Tarea cl = seleccionado();
+        actualizarTarea c = new actualizarTarea(cl);
+        c.setVisible(true);
     }//GEN-LAST:event_tablaConsultaMouseClicked
 
     private void txtActividadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtActividadKeyTyped
-        char c = evt.getKeyChar();
-        if (Character.isLetter(c)) {
-            getToolkit().beep();
-            evt.consume();
-        }
-
         if (txtActividad.getText().length() == 100) {
+            getToolkit().beep();
             evt.consume();
             JOptionPane.showMessageDialog(this, "Sólo se permiten 100 caracteres");
         }
     }//GEN-LAST:event_txtActividadKeyTyped
 
     private void dropBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dropBusquedaActionPerformed
-        // TODO add your handling code here:
+        String buscarEstado = dropBusqueda.getSelectedItem().toString();
+        if (!buscarEstado.equalsIgnoreCase("todo")){
+            ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarEstado(buscarEstado);
+            actualizaTabla(lista);
+        }
+        else{
+            ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
+            actualizaTabla(lista);
+        }
     }//GEN-LAST:event_dropBusquedaActionPerformed
 
     /**
