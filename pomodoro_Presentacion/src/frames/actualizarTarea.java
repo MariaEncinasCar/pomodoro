@@ -6,6 +6,7 @@
 package frames;
 
 import java.util.ArrayList;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import negocio.CtrlTarea;
 import negocio.FabricaNegocios;
@@ -59,7 +60,7 @@ public class actualizarTarea extends javax.swing.JFrame {
         tarea.setNombre_desc(nombre);
         tarea.setEstado(estado);
         ctrlTarea.actualizar(tarea);
-        JOptionPane.showMessageDialog(null, "Tarea actualizada");
+        JOptionPane.showMessageDialog(null, "Tarea actualizada de forma exitosa");
     }
 
     /**
@@ -153,8 +154,18 @@ public class actualizarTarea extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-        actualizar();
-        dispose();
+
+        int res = JOptionPane.showOptionDialog(new JFrame(), "¿Deseas marcar tu tarea como terminada?", "Notificación de tarea",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+        if (res == JOptionPane.YES_OPTION) {
+            System.out.println("Cambiando estado a terminado");
+            actualizar();
+        } else if (res == JOptionPane.NO_OPTION) {
+            System.out.println("Dejando estado en proceso");
+        } else if (res == JOptionPane.CLOSED_OPTION) {
+            System.out.println("pq cerró y no contestó la pregunta q grosero e");
+        }  
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
