@@ -83,7 +83,6 @@ public class menuPomodoro extends javax.swing.JFrame {
         tablaConsulta.setModel(modelo);
     }
 
-    //Falta hacer que no se puedan repetir las mismas tareas o.o
     private boolean verificarDato() {
         String tarea = txtActividad.getText();
         if (!tarea.isEmpty() && estado.equalsIgnoreCase("Pendiente")) {
@@ -94,7 +93,6 @@ public class menuPomodoro extends javax.swing.JFrame {
 
     private void guardar() {
         String tarea = txtActividad.getText();
-        //ComprobarRepetida();
         if (verificarDato()) {
             Tarea actividad = new Tarea(tarea, estado);
             ctrlTarea.guardar(actividad);
@@ -110,6 +108,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         System.out.println("descansoS: " + noDescanso);
         if (noDescanso == 0) {
             JOptionPane.showMessageDialog(null, "Iniciar descanso largo");
+            btnPausa.setEnabled(false);
             pomodoroActivo = false;
             noDescanso = 4;
             noPomodoro = 4;
@@ -120,6 +119,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
         else if (noPomodoro > noDescanso) {
             JOptionPane.showMessageDialog(null, "Iniciar descanso");
+            btnPausa.setEnabled(false);
             pomodoroActivo = false;
             noPomodoro--;
             m = 0;
@@ -129,6 +129,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
         else {
             JOptionPane.showMessageDialog(null, "Iniciar pomodoro");
+            btnPausa.setEnabled(false);
             pomodoroActivo = true;
             noDescanso--;
             m = 0;
@@ -163,26 +164,30 @@ public class menuPomodoro extends javax.swing.JFrame {
     }
 
     private void limiteTimer() {
-        if (etiquetaTiempo.getText().equalsIgnoreCase("00:00:00") && pomodoroActivo) {
-            int res = JOptionPane.showOptionDialog(new JFrame(), "Tu tarea ha finalizado, ¿deseas marcarla como finalizada?", "Notificación de tarea",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
-            if (res == JOptionPane.YES_OPTION) {
-                System.out.println("Cambiando estado a finalizado");
-            } else if (res == JOptionPane.NO_OPTION) {
-                System.out.println("Dejando estado en pendientes");
-            } else if (res == JOptionPane.CLOSED_OPTION) {
-                System.out.println("pq cerró y no contestó la pregunta q grosero e");
-            }
-            if (t.isRunning()) {
-                        t.stop();
-                    }
-                    btnPausa.setEnabled(true);
-                    btnReiniciar.setEnabled(true);
-                    btnIniciar.setEnabled(true);
-                    noPomodoros.setText(this.verificarDescanso());
-                    actualizarLabel();
+        if (etiquetaTiempo.getText().equalsIgnoreCase("00:05:00") && pomodoroActivo) {
+            JOptionPane.showMessageDialog(null, "Su tarea está a punto de concluir");
+                    if (etiquetaTiempo.getText().equalsIgnoreCase("00:00:00") && pomodoroActivo) {
+        //            int res = JOptionPane.showOptionDialog(new JFrame(), "Tu tarea ha finalizado, ¿deseas marcarla como finalizada?", "Notificación de tarea",
+        //                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+        //                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+        //            if (res == JOptionPane.YES_OPTION) {
+        //                System.out.println("Cambiando estado a finalizado");
+        //            } else if (res == JOptionPane.NO_OPTION) {
+        //                System.out.println("Dejando estado en pendientes");
+        //            } else if (res == JOptionPane.CLOSED_OPTION) {
+        //                System.out.println("pq cerró y no contestó la pregunta q grosero e");
+        //            }
+                    if (t.isRunning()) {
+                                t.stop();
+                            }
+                            btnPausa.setEnabled(true);
+                            btnReiniciar.setEnabled(true);
+                            btnIniciar.setEnabled(true);
+                            noPomodoros.setText(this.verificarDescanso());
+                            actualizarLabel();
+                }
         }
+        
         else if (etiquetaTiempo.getText().equalsIgnoreCase("00:00:00")) {
             if (t.isRunning()) {
                         t.stop();
@@ -370,10 +375,20 @@ public class menuPomodoro extends javax.swing.JFrame {
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         guardar();
+        String buscarEstado = dropBusqueda.getSelectedItem().toString();
+        if (!buscarEstado.equalsIgnoreCase("todo")){
+            ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarEstado(buscarEstado);
+            actualizaTabla(lista);
+        }
+        else{
+            ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
+            actualizaTabla(lista);
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnPausaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPausaActionPerformed
         t.stop();
+        JOptionPane.showMessageDialog(null, "Temporizador en pausa");
         btnIniciar.setEnabled(true);
         btnPausa.setEnabled(false);
     }//GEN-LAST:event_btnPausaActionPerformed
