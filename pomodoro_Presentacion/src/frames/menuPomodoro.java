@@ -220,7 +220,6 @@ public class menuPomodoro extends javax.swing.JFrame {
 
         jLabel3 = new javax.swing.JLabel();
         txtActividad = new javax.swing.JTextField();
-        btnTerminar = new javax.swing.JButton();
         btnReiniciar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnPausa = new javax.swing.JButton();
@@ -230,6 +229,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         noPomodoros = new javax.swing.JLabel();
         dropBusqueda = new javax.swing.JComboBox<>();
         btnIniciar = new javax.swing.JButton();
+        jLabel4 = new javax.swing.JLabel();
         etiquetaTiempo = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
 
@@ -250,19 +250,6 @@ public class menuPomodoro extends javax.swing.JFrame {
         });
         getContentPane().add(txtActividad, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 560, 300, 50));
 
-        btnTerminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnTerminar.png"))); // NOI18N
-        btnTerminar.setToolTipText("Terminar tarea");
-        btnTerminar.setContentAreaFilled(false);
-        btnTerminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        btnTerminar.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnTerminar2.png"))); // NOI18N
-        btnTerminar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnTerminar2.png"))); // NOI18N
-        btnTerminar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTerminarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(btnTerminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 540, -1, -1));
-
         btnReiniciar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnRestablecer.png"))); // NOI18N
         btnReiniciar.setToolTipText("Reiniciar");
         btnReiniciar.setContentAreaFilled(false);
@@ -274,7 +261,7 @@ public class menuPomodoro extends javax.swing.JFrame {
                 btnReiniciarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 540, -1, -1));
+        getContentPane().add(btnReiniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 540, -1, -1));
 
         btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnRegistrar.png"))); // NOI18N
         btnGuardar.setContentAreaFilled(false);
@@ -300,7 +287,7 @@ public class menuPomodoro extends javax.swing.JFrame {
                 btnPausaActionPerformed(evt);
             }
         });
-        getContentPane().add(btnPausa, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 540, -1, -1));
+        getContentPane().add(btnPausa, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 540, -1, -1));
 
         jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
         jLabel1.setText("Pomodoros para descanso largo:");
@@ -351,7 +338,11 @@ public class menuPomodoro extends javax.swing.JFrame {
                 btnIniciarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 540, -1, -1));
+        getContentPane().add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 540, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
+        jLabel4.setText("Nombre del pomodoro");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 530, -1, -1));
 
         etiquetaTiempo.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 44)); // NOI18N
         etiquetaTiempo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -420,19 +411,6 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_dropBusquedaActionPerformed
 
-    private void btnTerminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTerminarActionPerformed
-        if (t.isRunning()) {
-            t.stop();
-            btnIniciar.setEnabled(true);
-        }
-        btnPausa.setEnabled(false);
-        btnReiniciar.setEnabled(false);
-        m = 0;
-        s = 20;
-        cs = 0;
-        actualizarLabel();
-    }//GEN-LAST:event_btnTerminarActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -474,12 +452,12 @@ public class menuPomodoro extends javax.swing.JFrame {
     private javax.swing.JButton btnIniciar;
     private javax.swing.JButton btnPausa;
     private javax.swing.JButton btnReiniciar;
-    private javax.swing.JButton btnTerminar;
     private javax.swing.JComboBox<String> dropBusqueda;
     private javax.swing.JLabel etiquetaTiempo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel noPomodoros;
     private javax.swing.JTable tablaConsulta;
