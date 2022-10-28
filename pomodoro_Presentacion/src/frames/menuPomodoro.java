@@ -37,7 +37,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         String estado = "Pendiente";
         private Timer t;
     private int m = 0, s = 20, cs = 99, noPomodoro = 4, noDescanso = 3;
-    private boolean pomodoroActivo = true, descansoActivo = false;
+    private boolean pomodoroActivo = true, descansoActivo = false, descansoLargoActivo = false;
    
             
     public menuPomodoro() {
@@ -103,41 +103,59 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
     }
     
+    /*
+     * Método para verificar la cantidad de pomodoros y descansos.
+     * @return El número de pomodoros para el descanso más largo.
+     */
     private String verificarDescanso() {
-        System.err.println("Pomodoros: " + noPomodoro);
-        System.out.println("descansoS: " + noDescanso);
         if (noDescanso == 0) {
             JOptionPane.showMessageDialog(null, "Iniciar descanso largo");
             btnPausa.setEnabled(false);
             pomodoroActivo = false;
+            descansoLargoActivo = true;
             noDescanso = 4;
             noPomodoro = 4;
-            m = 0;
-            s = 10;
-            cs = 0;
+            this.tiempoDescansoLargo();
             return "4";
         }
         else if (noPomodoro > noDescanso) {
             JOptionPane.showMessageDialog(null, "Iniciar descanso");
             btnPausa.setEnabled(false);
             pomodoroActivo = false;
+            descansoActivo = true;
             noPomodoro--;
-            m = 0;
-            s = 5;
-            cs = 0;
+            this.tiempoDescanso();
             return Integer.toString(noPomodoro);
         }
         else {
             JOptionPane.showMessageDialog(null, "Iniciar pomodoro");
             btnPausa.setEnabled(false);
             pomodoroActivo = true;
+            descansoActivo = false;
+            descansoLargoActivo = false;
             noDescanso--;
-            m = 0;
-            s = 20;
-            cs = 0;
+            this.tiempoPomodoro();
             return Integer.toString(noPomodoro);
         }
         
+    }
+    
+    private void tiempoPomodoro() {
+        m = 0;
+        s = 20;
+        cs = 0;
+    }
+    
+    private void tiempoDescansoLargo() {
+        m = 0;
+        s = 10;
+        cs = 0;
+    }
+    
+    private void tiempoDescanso() {
+        m = 0;
+        s = 5;
+        cs = 0;
     }
     
     private ActionListener acciones = new ActionListener() {
@@ -365,11 +383,17 @@ public class menuPomodoro extends javax.swing.JFrame {
             t.stop();
             btnIniciar.setEnabled(true);
         }
+        if (pomodoroActivo) {
+            this.tiempoPomodoro();
+        }
+        else if (descansoLargoActivo){
+            this.tiempoDescansoLargo();
+        }
+        else if (descansoActivo) {
+            this.tiempoDescanso();
+        }
         btnPausa.setEnabled(false);
         btnReiniciar.setEnabled(false);
-        m = 0;
-        s = 20;
-        cs = 0;
         actualizarLabel();
     }//GEN-LAST:event_btnReiniciarActionPerformed
 
