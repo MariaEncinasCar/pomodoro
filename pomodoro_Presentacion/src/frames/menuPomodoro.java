@@ -108,9 +108,9 @@ public class menuPomodoro extends javax.swing.JFrame {
      * @return El número de pomodoros para el descanso más largo.
      */
     private String verificarDescanso() {
+        btnIniciar.setEnabled(false);
         if (noDescanso == 0) {
             JOptionPane.showMessageDialog(null, "Iniciar descanso largo");
-            btnPausa.setEnabled(false);
             pomodoroActivo = false;
             descansoLargoActivo = true;
             noDescanso = 4;
@@ -120,7 +120,6 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
         else if (noPomodoro > noDescanso) {
             JOptionPane.showMessageDialog(null, "Iniciar descanso");
-            btnPausa.setEnabled(false);
             pomodoroActivo = false;
             descansoActivo = true;
             noPomodoro--;
@@ -129,7 +128,6 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
         else {
             JOptionPane.showMessageDialog(null, "Iniciar pomodoro");
-            btnPausa.setEnabled(false);
             pomodoroActivo = true;
             descansoActivo = false;
             descansoLargoActivo = false;
@@ -137,7 +135,6 @@ public class menuPomodoro extends javax.swing.JFrame {
             this.tiempoPomodoro();
             return Integer.toString(noPomodoro);
         }
-        
     }
     
     private void tiempoPomodoro() {
@@ -195,9 +192,9 @@ public class menuPomodoro extends javax.swing.JFrame {
         //            } else if (res == JOptionPane.CLOSED_OPTION) {
         //                System.out.println("pq cerró y no contestó la pregunta q grosero e");
         //            }
-                    if (t.isRunning()) {
-                                t.stop();
-                            }
+                    //if (t.isRunning()) {
+                        //        t.stop();
+                         //   }
                             btnPausa.setEnabled(true);
                             btnReiniciar.setEnabled(true);
                             btnIniciar.setEnabled(true);
@@ -207,9 +204,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
         
         else if (etiquetaTiempo.getText().equalsIgnoreCase("00:00:00")) {
-            if (t.isRunning()) {
-                        t.stop();
-                    }
+            
                     btnPausa.setEnabled(true);
                     btnReiniciar.setEnabled(true);
                     btnIniciar.setEnabled(true);
