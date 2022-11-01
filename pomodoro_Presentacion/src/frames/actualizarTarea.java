@@ -155,16 +155,16 @@ public class actualizarTarea extends javax.swing.JFrame {
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
 
-        int res = JOptionPane.showOptionDialog(new JFrame(), "¿Deseas marcar tu tarea como terminada?", "Notificación de tarea",
+        int res = JOptionPane.showOptionDialog(new JFrame(), "¿Deseas actualizar tu tarea?", "Notificación de tarea",
                 JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
                 new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
         if (res == JOptionPane.YES_OPTION) {
-            System.out.println("Cambiando estado a terminado");
+            System.out.println("Actualizando tarea");
             actualizar();
         } else if (res == JOptionPane.NO_OPTION) {
-            System.out.println("Dejando estado en proceso");
+            System.out.println("No actualizar tarea");
         } else if (res == JOptionPane.CLOSED_OPTION) {
-            System.out.println("pq cerró y no contestó la pregunta q grosero e");
+            System.out.println("No contestó");
         }  
     }//GEN-LAST:event_btnAceptarActionPerformed
 

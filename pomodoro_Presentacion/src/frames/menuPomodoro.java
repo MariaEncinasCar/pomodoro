@@ -58,16 +58,21 @@ public class menuPomodoro extends javax.swing.JFrame {
                 return false;
             }
         };
-
-        modelo.addColumn("Tarea");
+        if (dropBusqueda.getSelectedItem().toString().equalsIgnoreCase("Todo")) {
+            modelo.addColumn("Tarea");
+            modelo.addColumn("Estado");
+        } else {
+            modelo.addColumn("Tarea");
+        }
 
         tablaConsulta.setModel(modelo);
 
-        String[] datos = new String[1];
+        String[] datos = new String[2];
         if (lista != null) {
             for (Tarea a : lista) {
                 if(dropBusqueda.getSelectedItem().toString().equalsIgnoreCase("Todo")){
                     datos[0] = String.valueOf(a.getNombre_desc());
+                    datos[1]= String.valueOf(a.getEstado());
                 }else{
                     if(dropBusqueda.getSelectedItem().toString().equalsIgnoreCase(a.getEstado())){
                         datos[0] = String.valueOf(a.getNombre_desc());
@@ -90,14 +95,33 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
         return false;
     }
+    
+    private boolean verificarTarea(Tarea actividad){
+        ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
+        if (lista == null) {
+            return true;
+        } else {
+            for (Tarea a : lista) {
+                if (a.getNombre_desc().equalsIgnoreCase(actividad.getNombre_desc())){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
     private void guardar() {
         String tarea = txtActividad.getText();
         if (verificarDato()) {
             Tarea actividad = new Tarea(tarea, estado);
-            ctrlTarea.guardar(actividad);
-            JOptionPane.showMessageDialog(null, "La tarea se ha registrado exitosamente");
-            txtActividad.setText("");
+            if (verificarTarea(actividad)) {
+                ctrlTarea.guardar(actividad);
+                JOptionPane.showMessageDialog(null, "La tarea se ha registrado exitosamente");
+                txtActividad.setText("");
+            }else{
+                JOptionPane.showMessageDialog(null, "La tarea ya se encuentra registrada");
+            }
+
         } else {
             JOptionPane.showMessageDialog(null, "Asigne un nombre a su tarea");
         }
@@ -221,9 +245,10 @@ public class menuPomodoro extends javax.swing.JFrame {
     public Tarea seleccionado() {
         int seleccion = tablaConsulta.getSelectedRow();
         Tarea tarea = new Tarea();
-        tarea.setId(listaTareas.get(seleccion).getId());
-        tarea.setNombre_desc(listaTareas.get(seleccion).getNombre_desc());
-        tarea.setEstado(listaTareas.get(seleccion).getEstado());
+        ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
+        tarea.setId(lista.get(seleccion).getId());
+        tarea.setNombre_desc(lista.get(seleccion).getNombre_desc());
+        tarea.setEstado(lista.get(seleccion).getEstado());
         return tarea;
     }
 
@@ -241,7 +266,8 @@ public class menuPomodoro extends javax.swing.JFrame {
         btnReiniciar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnPausa = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        lblBombre = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaConsulta = new javax.swing.JTable();
         noPomodoros = new javax.swing.JLabel();
@@ -307,9 +333,13 @@ public class menuPomodoro extends javax.swing.JFrame {
         });
         getContentPane().add(btnPausa, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 540, -1, -1));
 
-        jLabel1.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
-        jLabel1.setText("Pomodoros para descanso largo:");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 390, -1));
+        lblBombre.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
+        lblBombre.setText("Trabajando en...");
+        getContentPane().add(lblBombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, 390, -1));
+
+        jLabel5.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
+        jLabel5.setText("Pomodoros para descanso largo:");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 390, -1));
 
         tablaConsulta.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         tablaConsulta.setModel(new javax.swing.table.DefaultTableModel(
@@ -359,7 +389,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         getContentPane().add(btnIniciar, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 540, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
-        jLabel4.setText("Nombre del pomodoro");
+        jLabel4.setText("Nombre de la tarea");
         getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 530, -1, -1));
 
         etiquetaTiempo.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 44)); // NOI18N
@@ -422,6 +452,13 @@ public class menuPomodoro extends javax.swing.JFrame {
     private void tablaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaConsultaMouseClicked
         Tarea cl = seleccionado();
         actualizarTarea c = new actualizarTarea(cl);
+        int seleccion = tablaConsulta.getSelectedRow();
+        ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
+        String nombre = lista.get(seleccion).getNombre_desc();
+        String estado = lista.get(seleccion).getEstado();
+        if (!estado.equalsIgnoreCase("Terminada")) {
+            lblBombre.setText("Trabajando en " + nombre);
+        }
         c.setVisible(true);
     }//GEN-LAST:event_tablaConsultaMouseClicked
 
@@ -488,11 +525,12 @@ public class menuPomodoro extends javax.swing.JFrame {
     private javax.swing.JButton btnReiniciar;
     private javax.swing.JComboBox<String> dropBusqueda;
     private javax.swing.JLabel etiquetaTiempo;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblBombre;
     private javax.swing.JLabel noPomodoros;
     private javax.swing.JTable tablaConsulta;
     private javax.swing.JTextField txtActividad;
