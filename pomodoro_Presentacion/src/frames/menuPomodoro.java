@@ -271,6 +271,9 @@ public class menuPomodoro extends javax.swing.JFrame {
         jScrollPane2 = new javax.swing.JScrollPane();
         tablaConsulta = new javax.swing.JTable();
         noPomodoros = new javax.swing.JLabel();
+        btnModificar = new javax.swing.JButton();
+        btnAbajo = new javax.swing.JButton();
+        btnArriba = new javax.swing.JButton();
         dropBusqueda = new javax.swing.JComboBox<>();
         btnIniciar = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
@@ -358,11 +361,47 @@ public class menuPomodoro extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(tablaConsulta);
 
-        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 130, 550, 370));
+        getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 130, 460, 370));
 
         noPomodoros.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
         noPomodoros.setText("4");
         getContentPane().add(noPomodoros, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 40, 30));
+
+        btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnModificar.png"))); // NOI18N
+        btnModificar.setContentAreaFilled(false);
+        btnModificar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnModificar.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnModificar2.png"))); // NOI18N
+        btnModificar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnModificar2.png"))); // NOI18N
+        btnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnModificarActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnModificar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 260, 80, -1));
+
+        btnAbajo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnAbajo1.png"))); // NOI18N
+        btnAbajo.setContentAreaFilled(false);
+        btnAbajo.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnAbajo.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnAbajo2.png"))); // NOI18N
+        btnAbajo.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnAbajo2.png"))); // NOI18N
+        btnAbajo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnAbajoActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnAbajo, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 400, 80, -1));
+
+        btnArriba.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnArriba1.png"))); // NOI18N
+        btnArriba.setContentAreaFilled(false);
+        btnArriba.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnArriba.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnArriba2.png"))); // NOI18N
+        btnArriba.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnArriba2.png"))); // NOI18N
+        btnArriba.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnArribaActionPerformed(evt);
+            }
+        });
+        getContentPane().add(btnArriba, new org.netbeans.lib.awtextra.AbsoluteConstraints(1090, 120, 80, -1));
 
         dropBusqueda.setBackground(new java.awt.Color(255, 51, 51));
         dropBusqueda.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
@@ -482,6 +521,18 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_dropBusquedaActionPerformed
 
+    private void btnArribaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArribaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnArribaActionPerformed
+
+    private void btnAbajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbajoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnAbajoActionPerformed
+
+    private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnModificarActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -519,8 +570,11 @@ public class menuPomodoro extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAbajo;
+    private javax.swing.JButton btnArriba;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnIniciar;
+    private javax.swing.JButton btnModificar;
     private javax.swing.JButton btnPausa;
     private javax.swing.JButton btnReiniciar;
     private javax.swing.JComboBox<String> dropBusqueda;
