@@ -18,6 +18,7 @@ import javax.swing.JLabel;
 import javax.swing.Timer;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import objetos.Tarea;
 import negocio.CtrlTarea;
 import negocio.FabricaNegocios;
@@ -72,10 +73,14 @@ public class menuPomodoro extends javax.swing.JFrame {
             for (Tarea a : lista) {
                 if(dropBusqueda.getSelectedItem().toString().equalsIgnoreCase("Todo")){
                     datos[0] = String.valueOf(a.getNombre_desc());
-                    datos[1]= String.valueOf(a.getEstado());
-                }else{
-                    if(dropBusqueda.getSelectedItem().toString().equalsIgnoreCase(a.getEstado())){
+                    datos[1] = String.valueOf(a.getEstado());
+                    btnArriba.setEnabled(false);
+                    btnAbajo.setEnabled(false);
+                } else {
+                    if (dropBusqueda.getSelectedItem().toString().equalsIgnoreCase(a.getEstado())){
                         datos[0] = String.valueOf(a.getNombre_desc());
+                        btnArriba.setEnabled(true);
+                        btnAbajo.setEnabled(true);
                     }
                 }
                 
@@ -489,16 +494,7 @@ public class menuPomodoro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void tablaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaConsultaMouseClicked
-        Tarea cl = seleccionado();
-        actualizarTarea c = new actualizarTarea(cl);
-        int seleccion = tablaConsulta.getSelectedRow();
-        ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
-        String nombre = lista.get(seleccion).getNombre_desc();
-        String estado = lista.get(seleccion).getEstado();
-        if (!estado.equalsIgnoreCase("Terminada")) {
-            lblBombre.setText("Trabajando en " + nombre);
-        }
-        c.setVisible(true);
+        
     }//GEN-LAST:event_tablaConsultaMouseClicked
 
     private void txtActividadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtActividadKeyTyped
@@ -514,23 +510,47 @@ public class menuPomodoro extends javax.swing.JFrame {
         if (!buscarEstado.equalsIgnoreCase("todo")){
             ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarEstado(buscarEstado);
             actualizaTabla(lista);
+            btnArriba.setEnabled(true);
+            btnAbajo.setEnabled(true);
         }
         else{
             ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
             actualizaTabla(lista);
+            btnArriba.setEnabled(false);
+            btnAbajo.setEnabled(false);
         }
     }//GEN-LAST:event_dropBusquedaActionPerformed
 
     private void btnArribaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnArribaActionPerformed
-        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tablaConsulta.getModel();
+        int index = tablaConsulta.getSelectedRow();
+        if (index > 0) {
+            model.moveRow(index, index, index - 1);
+            tablaConsulta.setRowSelectionInterval(index-1, index-1);
+        }
+
     }//GEN-LAST:event_btnArribaActionPerformed
 
     private void btnAbajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbajoActionPerformed
-        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) tablaConsulta.getModel();
+        int index = tablaConsulta.getSelectedRow();
+        if (index < model.getRowCount()-1) {
+            model.moveRow(index, index, index +1);
+            tablaConsulta.setRowSelectionInterval(index+1, index+1);
+        }
     }//GEN-LAST:event_btnAbajoActionPerformed
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
-        // TODO add your handling code here:
+        Tarea cl = seleccionado();
+        actualizarTarea c = new actualizarTarea(cl);
+        int seleccion = tablaConsulta.getSelectedRow();
+        ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
+        String nombre = lista.get(seleccion).getNombre_desc();
+        String estado = lista.get(seleccion).getEstado();
+        if (!estado.equalsIgnoreCase("Terminada")) {
+            lblBombre.setText("Trabajando en " + nombre);
+        }
+        c.setVisible(true);
     }//GEN-LAST:event_btnModificarActionPerformed
 
     /**
