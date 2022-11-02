@@ -39,6 +39,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         private Timer t;
     private int m = 0, s = 20, cs = 99, noPomodoro = 4, noDescanso = 3;
     private boolean pomodoroActivo = true, descansoActivo = false, descansoLargoActivo = false;
+    private ArrayList<Tarea> ordenPendientes = (ArrayList<Tarea>) ctrlTarea.buscarEstado("Pendiente");
    
             
     public menuPomodoro() {
@@ -79,8 +80,13 @@ public class menuPomodoro extends javax.swing.JFrame {
                 } else {
                     if (dropBusqueda.getSelectedItem().toString().equalsIgnoreCase(a.getEstado())){
                         datos[0] = String.valueOf(a.getNombre_desc());
-                        btnArriba.setEnabled(true);
-                        btnAbajo.setEnabled(true);
+                        if(a.getEstado().equalsIgnoreCase("pendiente")){
+                            btnArriba.setEnabled(true);
+                            btnAbajo.setEnabled(true);
+                        } else {
+                            btnArriba.setEnabled(false);
+                            btnAbajo.setEnabled(false);
+                        }
                     }
                 }
                 
@@ -249,11 +255,20 @@ public class menuPomodoro extends javax.swing.JFrame {
      */
     public Tarea seleccionado() {
         int seleccion = tablaConsulta.getSelectedRow();
+        String nombreS = String.valueOf(tablaConsulta.getValueAt(seleccion, NORMAL));
+        
         Tarea tarea = new Tarea();
         ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
-        tarea.setId(lista.get(seleccion).getId());
-        tarea.setNombre_desc(lista.get(seleccion).getNombre_desc());
-        tarea.setEstado(lista.get(seleccion).getEstado());
+        int i = 0;
+        for(Tarea a: lista){
+            if(a.getNombre_desc().equalsIgnoreCase(nombreS)){
+                break;
+            }
+            i++;
+        }
+        tarea.setId(lista.get(i).getId());
+        tarea.setNombre_desc(lista.get(i).getNombre_desc());
+        tarea.setEstado(lista.get(i).getEstado());
         return tarea;
     }
 
@@ -509,9 +524,15 @@ public class menuPomodoro extends javax.swing.JFrame {
         String buscarEstado = dropBusqueda.getSelectedItem().toString();
         if (!buscarEstado.equalsIgnoreCase("todo")){
             ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarEstado(buscarEstado);
-            actualizaTabla(lista);
-            btnArriba.setEnabled(true);
-            btnAbajo.setEnabled(true);
+            if (buscarEstado.equalsIgnoreCase("pendiente")) {
+                actualizaTabla(ordenPendientes);
+                btnArriba.setEnabled(true);
+                btnAbajo.setEnabled(true);
+            } else {
+                actualizaTabla(lista);
+                btnArriba.setEnabled(false);
+                btnAbajo.setEnabled(false);
+            }
         }
         else{
             ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
@@ -528,7 +549,11 @@ public class menuPomodoro extends javax.swing.JFrame {
             model.moveRow(index, index, index - 1);
             tablaConsulta.setRowSelectionInterval(index-1, index-1);
         }
+        ordenPendientes.clear();
 
+        for (int i = 0; i < model.getRowCount(); i++) {
+            ordenPendientes.add(new Tarea(String.valueOf(tablaConsulta.getValueAt(i, NORMAL)), "Pendiente"));
+        }
     }//GEN-LAST:event_btnArribaActionPerformed
 
     private void btnAbajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbajoActionPerformed
@@ -537,6 +562,10 @@ public class menuPomodoro extends javax.swing.JFrame {
         if (index < model.getRowCount()-1) {
             model.moveRow(index, index, index +1);
             tablaConsulta.setRowSelectionInterval(index+1, index+1);
+        }
+        ordenPendientes.clear();
+        for (int i = 0; i < model.getRowCount(); i++) {
+            ordenPendientes.add(new Tarea(String.valueOf(tablaConsulta.getValueAt(i, NORMAL)), "Pendiente"));
         }
     }//GEN-LAST:event_btnAbajoActionPerformed
 
