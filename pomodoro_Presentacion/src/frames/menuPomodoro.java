@@ -40,7 +40,7 @@ public class menuPomodoro extends javax.swing.JFrame {
     private int m = 0, s = 20, cs = 99, noPomodoro = 4, noDescanso = 3;
     private boolean pomodoroActivo = true, descansoActivo = false, descansoLargoActivo = false;
     private ArrayList<Tarea> ordenPendientes = (ArrayList<Tarea>) ctrlTarea.buscarEstado("Pendiente");
-   
+    private Tarea objTarea;
             
     public menuPomodoro() {
         initComponents();
@@ -320,6 +320,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         btnReiniciar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnRestablecer.png"))); // NOI18N
         btnReiniciar.setToolTipText("Reiniciar");
         btnReiniciar.setContentAreaFilled(false);
+        btnReiniciar.setEnabled(false);
         btnReiniciar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnReiniciar.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnRestablecer2.png"))); // NOI18N
         btnReiniciar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnRestablecer2.png"))); // NOI18N
@@ -437,6 +438,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         btnIniciar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnIniciar.png"))); // NOI18N
         btnIniciar.setToolTipText("Iniciar");
         btnIniciar.setContentAreaFilled(false);
+        btnIniciar.setEnabled(false);
         btnIniciar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnIniciar.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnIniciar2.png"))); // NOI18N
         btnIniciar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnIniciar2.png"))); // NOI18N
@@ -509,7 +511,41 @@ public class menuPomodoro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void tablaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaConsultaMouseClicked
+        Tarea cl = seleccionado();
         
+        String nombre = cl.getNombre_desc();
+        String estado = cl.getEstado();
+        System.out.println("Estado: " + estado);
+        if (estado.equalsIgnoreCase("Pendiente")) {
+            
+            cl.setEstado("En progreso");
+            ctrlTarea.actualizar(cl);
+            
+            DefaultTableModel model = (DefaultTableModel) tablaConsulta.getModel();
+            ordenPendientes.clear();
+
+            for (int i = 0; i < model.getRowCount(); i++) {
+                ordenPendientes.add(new Tarea(String.valueOf(tablaConsulta.getValueAt(i, NORMAL)), "Pendiente"));
+            }
+            ordenPendientes.add(cl);
+            
+            btnIniciar.setEnabled(true);
+            btnPausa.setEnabled(true);
+            btnReiniciar.setEnabled(true);
+            lblBombre.setText("Trabajando en " + nombre);
+        }
+        else if (estado.equalsIgnoreCase("En progreso")) {
+            btnIniciar.setEnabled(true);
+            btnPausa.setEnabled(true);
+            btnReiniciar.setEnabled(true);
+            lblBombre.setText("Trabajando en " + nombre);
+        }
+        else {
+            btnIniciar.setEnabled(false);
+            btnPausa.setEnabled(false);
+            btnReiniciar.setEnabled(false);
+            lblBombre.setText("Trabajando en...");
+        }
     }//GEN-LAST:event_tablaConsultaMouseClicked
 
     private void txtActividadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtActividadKeyTyped
@@ -572,13 +608,15 @@ public class menuPomodoro extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         Tarea cl = seleccionado();
         actualizarTarea c = new actualizarTarea(cl);
-        int seleccion = tablaConsulta.getSelectedRow();
-        ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
-        String nombre = lista.get(seleccion).getNombre_desc();
-        String estado = lista.get(seleccion).getEstado();
-        if (!estado.equalsIgnoreCase("Terminada")) {
-            lblBombre.setText("Trabajando en " + nombre);
+        if (ordenPendientes.contains(cl)){
+            if (!cl.getEstado().equalsIgnoreCase("Pendiente")) {
+                ordenPendientes.remove(cl);
+            }
         }
+        else if (cl.getEstado().equalsIgnoreCase("Pendiente")) {
+                ordenPendientes.add(cl);
+        }
+        
         c.setVisible(true);
     }//GEN-LAST:event_btnModificarActionPerformed
 
