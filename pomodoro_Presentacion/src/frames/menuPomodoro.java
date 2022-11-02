@@ -37,7 +37,7 @@ public class menuPomodoro extends javax.swing.JFrame {
     private ArrayList<Tarea> listaTareas = (ArrayList<Tarea>) ctrlTarea.consultar();
         String estado = "Pendiente";
         private Timer t;
-    private int m = 0, s = 20, cs = 99, noPomodoro = 4, noDescanso = 3;
+    private int m = 0, s = 20, cs = 69, noPomodoro = 4, noDescanso = 3;
     private boolean pomodoroActivo = true, descansoActivo = false, descansoLargoActivo = false;
     private ArrayList<Tarea> ordenPendientes = (ArrayList<Tarea>) ctrlTarea.buscarEstado("Pendiente");
     private Tarea objTarea;
@@ -154,6 +154,7 @@ public class menuPomodoro extends javax.swing.JFrame {
             return "4";
         }
         else if (noPomodoro > noDescanso) {
+            getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Iniciar descanso");
             pomodoroActivo = false;
             descansoActivo = true;
@@ -162,6 +163,7 @@ public class menuPomodoro extends javax.swing.JFrame {
             return Integer.toString(noPomodoro);
         }
         else {
+            getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Iniciar pomodoro");
             pomodoroActivo = true;
             descansoActivo = false;
@@ -195,7 +197,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         public void actionPerformed(ActionEvent ae) {
             --cs;
             if (cs < 0) {
-                cs = 99;
+                cs = 69;
                 --s;
             }
             if (s < 0) {
@@ -215,6 +217,7 @@ public class menuPomodoro extends javax.swing.JFrame {
 
     private void limiteTimer() {
         if (etiquetaTiempo.getText().equalsIgnoreCase("00:05:00") && pomodoroActivo) {
+            getToolkit().beep();
             JOptionPane.showMessageDialog(null, "Su tarea está a punto de concluir");
                     if (etiquetaTiempo.getText().equalsIgnoreCase("00:00:00") && pomodoroActivo) {
         //            int res = JOptionPane.showOptionDialog(new JFrame(), "Tu tarea ha finalizado, ¿deseas marcarla como finalizada?", "Notificación de tarea",
@@ -301,6 +304,8 @@ public class menuPomodoro extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Pomodoro");
+        setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel3.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 52)); // NOI18N
