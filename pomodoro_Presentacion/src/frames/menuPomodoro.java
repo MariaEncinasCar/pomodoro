@@ -520,14 +520,8 @@ public class menuPomodoro extends javax.swing.JFrame {
             
             cl.setEstado("En progreso");
             ctrlTarea.actualizar(cl);
-            
-            DefaultTableModel model = (DefaultTableModel) tablaConsulta.getModel();
-            ordenPendientes.clear();
-
-            for (int i = 0; i < model.getRowCount(); i++) {
-                ordenPendientes.add(new Tarea(String.valueOf(tablaConsulta.getValueAt(i, NORMAL)), "Pendiente"));
-            }
-            ordenPendientes.add(cl);
+          
+            ordenPendientes.remove(cl);
             
             btnIniciar.setEnabled(true);
             btnPausa.setEnabled(true);
@@ -613,8 +607,8 @@ public class menuPomodoro extends javax.swing.JFrame {
                 ordenPendientes.remove(cl);
             }
         }
-        else if (cl.getEstado().equalsIgnoreCase("Pendiente")) {
-                ordenPendientes.add(cl);
+        else if (cl.getEstado().equalsIgnoreCase("En Progreso")) {
+            ordenPendientes.add(cl);
         }
         
         c.setVisible(true);
