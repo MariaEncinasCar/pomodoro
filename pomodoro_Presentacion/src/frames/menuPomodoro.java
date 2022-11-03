@@ -129,6 +129,7 @@ public class menuPomodoro extends javax.swing.JFrame {
                 ctrlTarea.guardar(actividad);
                 JOptionPane.showMessageDialog(null, "La tarea se ha registrado exitosamente");
                 txtActividad.setText("");
+                ordenPendientes.add(actividad);
             }else{
                 JOptionPane.showMessageDialog(null, "La tarea ya se encuentra registrada");
             }
@@ -364,11 +365,11 @@ public class menuPomodoro extends javax.swing.JFrame {
 
         lblBombre.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
         lblBombre.setText("Trabajando en...");
-        getContentPane().add(lblBombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, 390, -1));
+        getContentPane().add(lblBombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 390, -1));
 
         jLabel5.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
         jLabel5.setText("Pomodoros para descanso largo:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 390, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 410, -1));
 
         tablaConsulta.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         tablaConsulta.setModel(new javax.swing.table.DefaultTableModel(
@@ -494,6 +495,8 @@ public class menuPomodoro extends javax.swing.JFrame {
         if (!buscarEstado.equalsIgnoreCase("todo")){
             ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarEstado(buscarEstado);
             actualizaTabla(lista);
+        }else if (buscarEstado.equalsIgnoreCase("Pendiente")){
+            actualizaTabla(ordenPendientes);
         }
         else{
             ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
@@ -517,33 +520,33 @@ public class menuPomodoro extends javax.swing.JFrame {
 
     private void tablaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaConsultaMouseClicked
         Tarea cl = seleccionado();
-        
+
         String nombre = cl.getNombre_desc();
         String estado = cl.getEstado();
         System.out.println("Estado: " + estado);
         if (estado.equalsIgnoreCase("Pendiente")) {
-            
+
             cl.setEstado("En progreso");
             ctrlTarea.actualizar(cl);
-          
+
             ordenPendientes.remove(cl);
-            
+
             btnIniciar.setEnabled(true);
             btnPausa.setEnabled(true);
             btnReiniciar.setEnabled(true);
             lblBombre.setText("Trabajando en " + nombre);
-        }
-        else if (estado.equalsIgnoreCase("En progreso")) {
+        } else if (estado.equalsIgnoreCase("En progreso")) {
             btnIniciar.setEnabled(true);
             btnPausa.setEnabled(true);
             btnReiniciar.setEnabled(true);
             lblBombre.setText("Trabajando en " + nombre);
-        }
-        else {
+            ordenPendientes.remove(cl);
+        } else {
             btnIniciar.setEnabled(false);
             btnPausa.setEnabled(false);
             btnReiniciar.setEnabled(false);
             lblBombre.setText("Trabajando en...");
+            ordenPendientes.remove(cl);
         }
     }//GEN-LAST:event_tablaConsultaMouseClicked
 
@@ -582,7 +585,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         int index = tablaConsulta.getSelectedRow();
         if (index > 0) {
             model.moveRow(index, index, index - 1);
-            tablaConsulta.setRowSelectionInterval(index-1, index-1);
+            tablaConsulta.setRowSelectionInterval(index - 1, index - 1);
         }
         ordenPendientes.clear();
 
@@ -594,9 +597,9 @@ public class menuPomodoro extends javax.swing.JFrame {
     private void btnAbajoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAbajoActionPerformed
         DefaultTableModel model = (DefaultTableModel) tablaConsulta.getModel();
         int index = tablaConsulta.getSelectedRow();
-        if (index < model.getRowCount()-1) {
-            model.moveRow(index, index, index +1);
-            tablaConsulta.setRowSelectionInterval(index+1, index+1);
+        if (index < model.getRowCount() - 1) {
+            model.moveRow(index, index, index + 1);
+            tablaConsulta.setRowSelectionInterval(index + 1, index + 1);
         }
         ordenPendientes.clear();
         for (int i = 0; i < model.getRowCount(); i++) {
@@ -607,15 +610,14 @@ public class menuPomodoro extends javax.swing.JFrame {
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         Tarea cl = seleccionado();
         actualizarTarea c = new actualizarTarea(cl);
-        if (ordenPendientes.contains(cl)){
+        if (ordenPendientes.contains(cl)) {
             if (!cl.getEstado().equalsIgnoreCase("Pendiente")) {
                 ordenPendientes.remove(cl);
             }
-        }
-        else if (cl.getEstado().equalsIgnoreCase("En Progreso")) {
+        } else if (cl.getEstado().equalsIgnoreCase("En Progreso")) {
             ordenPendientes.add(cl);
         }
-        
+
         c.setVisible(true);
     }//GEN-LAST:event_btnModificarActionPerformed
 
