@@ -41,6 +41,7 @@ public class menuPomodoro extends javax.swing.JFrame {
     private boolean pomodoroActivo = true, descansoActivo = false, descansoLargoActivo = false;
     private ArrayList<Tarea> ordenPendientes = (ArrayList<Tarea>) ctrlTarea.buscarEstado("Pendiente");
     private Tarea objTarea;
+    public String trabajo = "";
             
     public menuPomodoro() {
         initComponents();
@@ -258,10 +259,13 @@ public class menuPomodoro extends javax.swing.JFrame {
      * @return devuelve la tarea seleccionado
      */
     public Tarea seleccionado() {
+        Tarea tarea = new Tarea();
         int seleccion = tablaConsulta.getSelectedRow();
+        if(seleccion == -1){
+            return tarea;
+        }
         String nombreS = String.valueOf(tablaConsulta.getValueAt(seleccion, NORMAL));
         
-        Tarea tarea = new Tarea();
         ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
         int i = 0;
         for(Tarea a: lista){
@@ -519,35 +523,26 @@ public class menuPomodoro extends javax.swing.JFrame {
     }//GEN-LAST:event_btnIniciarActionPerformed
 
     private void tablaConsultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tablaConsultaMouseClicked
-        Tarea cl = seleccionado();
+        String buscarEstado = dropBusqueda.getSelectedItem().toString();
+        if (buscarEstado.equalsIgnoreCase("En progreso")) {
+            Tarea cl = seleccionado();
 
-        String nombre = cl.getNombre_desc();
-        String estado = cl.getEstado();
-        System.out.println("Estado: " + estado);
-        if (estado.equalsIgnoreCase("Pendiente")) {
-
-            cl.setEstado("En progreso");
-            ctrlTarea.actualizar(cl);
-
-            ordenPendientes.remove(cl);
-
-            btnIniciar.setEnabled(true);
-            btnPausa.setEnabled(true);
-            btnReiniciar.setEnabled(true);
-            lblBombre.setText("Trabajando en " + nombre);
-        } else if (estado.equalsIgnoreCase("En progreso")) {
-            btnIniciar.setEnabled(true);
-            btnPausa.setEnabled(true);
-            btnReiniciar.setEnabled(true);
-            lblBombre.setText("Trabajando en " + nombre);
-            ordenPendientes.remove(cl);
-        } else {
-            btnIniciar.setEnabled(false);
-            btnPausa.setEnabled(false);
-            btnReiniciar.setEnabled(false);
-            lblBombre.setText("Trabajando en...");
-            ordenPendientes.remove(cl);
+            String nombre = cl.getNombre_desc();
+            String estado = cl.getEstado();
+            
+            if (estado.equalsIgnoreCase("En progreso")) {
+                btnIniciar.setEnabled(true);
+                btnPausa.setEnabled(true);
+                btnReiniciar.setEnabled(true);
+                lblBombre.setText("Trabajando en " + nombre);
+            } else {
+                btnIniciar.setEnabled(false);
+                btnPausa.setEnabled(false);
+                btnReiniciar.setEnabled(false);
+                lblBombre.setText("Trabajando en...");
+            }
         }
+
     }//GEN-LAST:event_tablaConsultaMouseClicked
 
     private void txtActividadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtActividadKeyTyped
@@ -563,6 +558,17 @@ public class menuPomodoro extends javax.swing.JFrame {
         if (!buscarEstado.equalsIgnoreCase("todo")){
             ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarEstado(buscarEstado);
             if (buscarEstado.equalsIgnoreCase("pendiente")) {
+                
+                ArrayList<Tarea> listaT = (ArrayList<Tarea>) ctrlTarea.consultar();
+                for (int i = 0; i < ordenPendientes.size(); i++) {
+                    for (int j = 0; j < listaT.size(); j++) {
+                        if (ordenPendientes.get(i).getNombre_desc().equalsIgnoreCase(listaT.get(j).getNombre_desc()) 
+                                && !listaT.get(j).getEstado().equalsIgnoreCase("Pendiente")){
+                            ordenPendientes.remove(i);
+                        }
+                    }
+                }
+                
                 actualizaTabla(ordenPendientes);
                 btnArriba.setEnabled(true);
                 btnAbajo.setEnabled(true);
@@ -609,16 +615,21 @@ public class menuPomodoro extends javax.swing.JFrame {
 
     private void btnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnModificarActionPerformed
         Tarea cl = seleccionado();
-        actualizarTarea c = new actualizarTarea(cl);
-        if (ordenPendientes.contains(cl)) {
-            if (!cl.getEstado().equalsIgnoreCase("Pendiente")) {
-                ordenPendientes.remove(cl);
+        if (cl.getId() != null) {
+            actualizarTarea c = new actualizarTarea(cl);
+            if (ordenPendientes.contains(cl)) {
+                if (!cl.getEstado().equalsIgnoreCase("Pendiente")) {
+                    ordenPendientes.remove(cl);
+                }
+            } else if (cl.getEstado().equalsIgnoreCase("En Progreso")) {
+                ordenPendientes.add(cl);
             }
-        } else if (cl.getEstado().equalsIgnoreCase("En Progreso")) {
-            ordenPendientes.add(cl);
-        }
 
-        c.setVisible(true);
+            c.setVisible(true);
+        }
+        else{
+            JOptionPane.showMessageDialog(this, "Seleccionar una tarea para editar");
+        }
     }//GEN-LAST:event_btnModificarActionPerformed
 
     /**

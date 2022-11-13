@@ -56,11 +56,13 @@ public class actualizarTarea extends javax.swing.JFrame {
     public void actualizar() {
         String nombre = txtNombre.getText();
         String estado = cbEstado.getSelectedItem().toString();
+        
         //Actualizar
         tarea.setNombre_desc(nombre);
         tarea.setEstado(estado);
         ctrlTarea.actualizar(tarea);
         JOptionPane.showMessageDialog(null, "Tarea actualizada de forma exitosa");
+        
     }
 
     /**
