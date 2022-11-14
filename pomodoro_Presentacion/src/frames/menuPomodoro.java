@@ -288,6 +288,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         tarea.setId(lista.get(i).getId());
         tarea.setNombre_desc(lista.get(i).getNombre_desc());
         tarea.setEstado(lista.get(i).getEstado());
+        tarea.setFechaTermino(lista.get(i).getFechaTermino());
         return tarea;
     }
 

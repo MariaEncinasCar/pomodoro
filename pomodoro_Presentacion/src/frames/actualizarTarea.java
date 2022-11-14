@@ -58,15 +58,15 @@ public class actualizarTarea extends javax.swing.JFrame {
     public void actualizar() {
         String nombre = txtNombre.getText();
         String estado = cbEstado.getSelectedItem().toString();
-        
-        //Actualizar
-        tarea.setNombre_desc(nombre);
-        tarea.setEstado(estado);
-        if(estado.equalsIgnoreCase("Terminada")){
+        if(estado.equalsIgnoreCase("Terminada") && tarea.getFechaTermino()== null){
             // Obteniendo la fecha actual del sistema.
             Date fecha = new Date(Calendar.getInstance().getTimeInMillis());
             tarea.setFechaTermino(fecha);
         }
+        //Actualizar
+        tarea.setNombre_desc(nombre);
+        tarea.setEstado(estado);
+        
         ctrlTarea.actualizar(tarea);
         JOptionPane.showMessageDialog(null, "Tarea actualizada de forma exitosa");
         
