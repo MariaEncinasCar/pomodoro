@@ -255,10 +255,24 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
         
         else if (etiquetaTiempo.getText().equalsIgnoreCase("00:00:00")) {
-            
                     btnPausa.setEnabled(true);
                     btnReiniciar.setEnabled(true);
                     btnIniciar.setEnabled(true);
+                    int res = JOptionPane.showOptionDialog(new JFrame(), "Su tarea ha concluido, ¿desea omitir su descanso?", "Notificación de descanso",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+                    if (res == JOptionPane.YES_OPTION) {
+//                        System.out.println("Cambiando estado a omitido");
+//                        btnIniciar.setEnabled(false);
+//                        getToolkit().beep();
+//                        JOptionPane.showMessageDialog(null, "Iniciar pomodoro");
+//                        pomodoroActivo = true;
+//                        descansoActivo = false;
+//                        descansoLargoActivo = false;
+//                        noDescanso--;
+//                        this.tiempoPomodoro();
+//                        noPomodoros.setText(Integer.toString(noDescanso));
+                    }else
                     noPomodoros.setText(this.verificarDescanso());
                     actualizarLabel();
         }
@@ -460,7 +474,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         btnIniciar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnIniciar.png"))); // NOI18N
         btnIniciar.setToolTipText("Iniciar");
         btnIniciar.setContentAreaFilled(false);
-        btnIniciar.setEnabled(false);
+        btnIniciar.setEnabled(true);
         btnIniciar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnIniciar.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnIniciar2.png"))); // NOI18N
         btnIniciar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnIniciar2.png"))); // NOI18N
