@@ -486,22 +486,28 @@ public class menuPomodoro extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnReiniciarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReiniciarActionPerformed
-        if (t.isRunning()) {
-            t.stop();
-            btnIniciar.setEnabled(true);
-        }
-        if (pomodoroActivo) {
+        int res = JOptionPane.showOptionDialog(new JFrame(), "¿Deseas reestablecer el pomodoro?", "Restablecer",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+        if (res == JOptionPane.YES_OPTION) {
+            System.out.println("Se restablece");
+            noPomodoro = 4;
+            noDescanso = 3;
+            noPomodoros.setText("4");
+            if (t.isRunning()) {
+                t.stop();
+                btnIniciar.setEnabled(true);
+            }
             this.tiempoPomodoro();
+            btnPausa.setEnabled(false);
+            btnReiniciar.setEnabled(false);
+            actualizarLabel();
+        } else if (res == JOptionPane.NO_OPTION) {
+            System.out.println("Se cancela");
+        } else if (res == JOptionPane.CLOSED_OPTION) {
+            System.out.println("No contestó");
         }
-        else if (descansoLargoActivo){
-            this.tiempoDescansoLargo();
-        }
-        else if (descansoActivo) {
-            this.tiempoDescanso();
-        }
-        btnPausa.setEnabled(false);
-        btnReiniciar.setEnabled(false);
-        actualizarLabel();
+
     }//GEN-LAST:event_btnReiniciarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
