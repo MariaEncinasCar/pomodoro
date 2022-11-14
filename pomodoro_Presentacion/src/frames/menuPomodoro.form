@@ -315,9 +315,7 @@
         </Property>
         <Property name="toolTipText" type="java.lang.String" value="Iniciar"/>
         <Property name="contentAreaFilled" type="boolean" value="false"/>
-        <Property name="enabled" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-          <Connection code="true" type="code"/>
-        </Property>
+        <Property name="enabled" type="boolean" value="false"/>
         <Property name="horizontalTextPosition" type="int" value="0"/>
         <Property name="pressedIcon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
           <Image iconType="3" name="/imagenes/btnIniciar2.png"/>

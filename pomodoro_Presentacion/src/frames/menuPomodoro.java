@@ -156,35 +156,60 @@ public class menuPomodoro extends javax.swing.JFrame {
      * @return El número de pomodoros para el descanso más largo.
      */
     private String verificarDescanso() {
+        boolean descanso = true;
         btnIniciar.setEnabled(false);
         if (noDescanso == 0) {
-            JOptionPane.showMessageDialog(null, "Iniciar descanso largo");
-            pomodoroActivo = false;
-            descansoLargoActivo = true;
             noDescanso = 4;
             noPomodoro = 4;
-            this.tiempoDescansoLargo();
-            return "4";
+            while (descanso) {
+                if (JOptionPane.showConfirmDialog(null, "¿Desea omitir el descanso largo?", "Iniciar descanso largo",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    // yes option
+                    if (JOptionPane.showConfirmDialog(null, "¿Esta seguro de omitir el descanso largo?", 
+                        "Omitir descanso largo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        break;
+                    }
+                }
+                else {
+                    // no option
+                    JOptionPane.showMessageDialog(null, "Iniciar descanso largo");
+                    pomodoroActivo = false;
+                    descansoLargoActivo = true;
+                    this.tiempoDescansoLargo();
+                    return "4";
+                }
+            }
         }
         else if (noPomodoro > noDescanso) {
-            getToolkit().beep();
-            JOptionPane.showMessageDialog(null, "Iniciar descanso");
-            pomodoroActivo = false;
-            descansoActivo = true;
             noPomodoro--;
-            this.tiempoDescanso();
-            return Integer.toString(noPomodoro);
-        }
-        else {
             getToolkit().beep();
-            JOptionPane.showMessageDialog(null, "Iniciar pomodoro");
-            pomodoroActivo = true;
-            descansoActivo = false;
-            descansoLargoActivo = false;
-            noDescanso--;
-            this.tiempoPomodoro();
-            return Integer.toString(noPomodoro);
+            while (descanso) {
+                if (JOptionPane.showConfirmDialog(null, "¿Desea omitir el descanso?", "Iniciar descanso",
+                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    // yes option
+                    if (JOptionPane.showConfirmDialog(null, "¿Esta seguro de omitir el descanso?", 
+                        "Omitir descanso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                        break;
+                    }
+                }
+                else {
+                    // no option
+                    JOptionPane.showMessageDialog(null, "Iniciar descanso");
+                    pomodoroActivo = false;
+                    descansoActivo = true;
+                    this.tiempoDescanso();
+                    return Integer.toString(noPomodoro);
+                }
+            }
         }
+        getToolkit().beep();
+        JOptionPane.showMessageDialog(null, "Iniciar pomodoro");
+        pomodoroActivo = true;
+        descansoActivo = false;
+        descansoLargoActivo = false;
+        noDescanso--;
+        this.tiempoPomodoro();
+        return Integer.toString(noPomodoro);
     }
     
     private void tiempoPomodoro() {
@@ -474,7 +499,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         btnIniciar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnIniciar.png"))); // NOI18N
         btnIniciar.setToolTipText("Iniciar");
         btnIniciar.setContentAreaFilled(false);
-        btnIniciar.setEnabled(true);
+        btnIniciar.setEnabled(false);
         btnIniciar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         btnIniciar.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnIniciar2.png"))); // NOI18N
         btnIniciar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnIniciar2.png"))); // NOI18N
