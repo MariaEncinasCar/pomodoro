@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import javax.swing.JButton;
@@ -64,7 +65,10 @@ public class menuPomodoro extends javax.swing.JFrame {
         if (dropBusqueda.getSelectedItem().toString().equalsIgnoreCase("Todo")) {
             modelo.addColumn("Tarea");
             modelo.addColumn("Estado");
-        } else {
+        } else if (dropBusqueda.getSelectedItem().toString().equalsIgnoreCase("Terminada")) {
+            modelo.addColumn("Tarea");
+            modelo.addColumn("Fecha Termino");
+        }else {
             modelo.addColumn("Tarea");
         }
 
@@ -84,6 +88,13 @@ public class menuPomodoro extends javax.swing.JFrame {
                         if(a.getEstado().equalsIgnoreCase("pendiente")){
                             btnArriba.setEnabled(true);
                             btnAbajo.setEnabled(true);
+                        } else if (dropBusqueda.getSelectedItem().toString().equalsIgnoreCase("Terminada")) {
+                            datos[0] = String.valueOf(a.getNombre_desc());
+                            SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy - HH:mm:ss");
+                            String fechaTexto = formatter.format(a.getFechaTermino());
+                            datos[1] = fechaTexto;
+                            btnArriba.setEnabled(false);
+                            btnAbajo.setEnabled(false);
                         } else {
                             btnArriba.setEnabled(false);
                             btnAbajo.setEnabled(false);
@@ -496,14 +507,14 @@ public class menuPomodoro extends javax.swing.JFrame {
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         guardar();
         String buscarEstado = dropBusqueda.getSelectedItem().toString();
-        if (!buscarEstado.equalsIgnoreCase("todo")){
-            ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarEstado(buscarEstado);
+        if (buscarEstado.equalsIgnoreCase("todo")){
+            ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
             actualizaTabla(lista);
         }else if (buscarEstado.equalsIgnoreCase("Pendiente")){
             actualizaTabla(ordenPendientes);
         }
         else{
-            ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
+            ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarTerminado();
             actualizaTabla(lista);
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
@@ -556,10 +567,10 @@ public class menuPomodoro extends javax.swing.JFrame {
     private void dropBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dropBusquedaActionPerformed
         String buscarEstado = dropBusqueda.getSelectedItem().toString();
         if (!buscarEstado.equalsIgnoreCase("todo")){
-            ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarEstado(buscarEstado);
             if (buscarEstado.equalsIgnoreCase("pendiente")) {
                 
                 ArrayList<Tarea> listaT = (ArrayList<Tarea>) ctrlTarea.consultar();
+                
                 for (int i = 0; i < ordenPendientes.size(); i++) {
                     for (int j = 0; j < listaT.size(); j++) {
                         if (ordenPendientes.get(i).getNombre_desc().equalsIgnoreCase(listaT.get(j).getNombre_desc()) 
@@ -572,7 +583,14 @@ public class menuPomodoro extends javax.swing.JFrame {
                 actualizaTabla(ordenPendientes);
                 btnArriba.setEnabled(true);
                 btnAbajo.setEnabled(true);
+                
+            } else if (buscarEstado.equalsIgnoreCase("Terminada")) {
+                ArrayList<Tarea> listaT = (ArrayList<Tarea>) ctrlTarea.buscarTerminado();
+                actualizaTabla(listaT);
+                btnArriba.setEnabled(false);
+                btnAbajo.setEnabled(false);
             } else {
+                ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarEstado("En progreso");
                 actualizaTabla(lista);
                 btnArriba.setEnabled(false);
                 btnAbajo.setEnabled(false);

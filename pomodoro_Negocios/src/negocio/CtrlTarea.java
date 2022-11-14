@@ -67,4 +67,14 @@ public class CtrlTarea {
         return tareasB;
     }
     
+    /**
+     * Método que busca tareas terminadas en orden descendente
+
+     * @return regresa una lista de tareas
+     */
+    public List<Tarea> buscarTerminado() {
+        List<Tarea> tareasB = repTarea.buscarTerminado();
+        return tareasB;
+    }
+    
 }

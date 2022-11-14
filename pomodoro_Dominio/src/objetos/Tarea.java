@@ -5,6 +5,7 @@
  */
 package objetos;
 
+import java.util.Date;
 import java.util.Objects;
 import org.bson.types.ObjectId;
 
@@ -18,6 +19,7 @@ public class Tarea {
     private ObjectId id;
     private String nombre_desc;
     private String estado;
+    private Date fechaTermino;
 
     public Tarea() {
         
@@ -56,12 +58,21 @@ public class Tarea {
         this.estado = estado;
     }
 
+    public Date getFechaTermino() {
+        return fechaTermino;
+    }
+
+    public void setFechaTermino(Date fechaTermino) {
+        this.fechaTermino = fechaTermino;
+    }
+
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 83 * hash + Objects.hashCode(this.id);
-        hash = 83 * hash + Objects.hashCode(this.nombre_desc);
-        hash = 83 * hash + Objects.hashCode(this.estado);
+        hash = 29 * hash + Objects.hashCode(this.id);
+        hash = 29 * hash + Objects.hashCode(this.nombre_desc);
+        hash = 29 * hash + Objects.hashCode(this.estado);
+        hash = 29 * hash + Objects.hashCode(this.fechaTermino);
         return hash;
     }
 
@@ -89,7 +100,7 @@ public class Tarea {
 
     @Override
     public String toString() {
-        return "Tareas{" + "id=" + id + ", nombre_desc=" + nombre_desc + '}';
+        return "Tarea{" + "id=" + id + ", nombre_desc=" + nombre_desc + ", estado=" + estado + ", fechaTermino=" + fechaTermino + '}';
     }
     
 }

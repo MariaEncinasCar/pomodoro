@@ -6,6 +6,8 @@
 package frames;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import negocio.CtrlTarea;
@@ -60,6 +62,11 @@ public class actualizarTarea extends javax.swing.JFrame {
         //Actualizar
         tarea.setNombre_desc(nombre);
         tarea.setEstado(estado);
+        if(estado.equalsIgnoreCase("Terminada")){
+            // Obteniendo la fecha actual del sistema.
+            Date fecha = new Date(Calendar.getInstance().getTimeInMillis());
+            tarea.setFechaTermino(fecha);
+        }
         ctrlTarea.actualizar(tarea);
         JOptionPane.showMessageDialog(null, "Tarea actualizada de forma exitosa");
         

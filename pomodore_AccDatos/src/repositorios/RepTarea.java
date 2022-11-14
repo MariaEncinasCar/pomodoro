@@ -60,6 +60,10 @@ public class RepTarea {
                 Updates.set("nombre_desc",tarea.getNombre_desc()));
         tareas.updateOne(Filters.eq("_id", tarea.getId()), 
                 Updates.set("estado",tarea.getEstado()));
+        if(tarea.getFechaTermino() != null){
+            tareas.updateOne(Filters.eq("_id", tarea.getId()), 
+                Updates.set("fechaTermino",tarea.getFechaTermino()));
+        } 
     }
     
     /**
@@ -78,6 +82,34 @@ public class RepTarea {
         findQuery.append("estado", regQuery);
         
         FindIterable<Document> iterable = baseDatos.getCollection("Tarea").find(findQuery);
+        MongoCursor<Document> cursor = iterable.iterator();
+        
+        while (cursor.hasNext()) {
+            Document document = cursor.next();
+            String n = document.getString("nombre_desc");
+            
+            Tarea  busqueda = tareas.find(Filters.eq("nombre_desc", n)).first();
+            
+            tareasB.add(busqueda);
+        }
+        
+        return tareasB;
+    }
+    
+    public List<Tarea> buscarTerminado() {
+        List<Tarea> tareasB = new ArrayList<>();
+        
+        Document regQuery = new Document();
+        regQuery.append("$regex", "(?)" + Pattern.quote("Terminada"));
+        regQuery.append("$options", "i");
+        
+        Document findQuery = new Document();
+        findQuery.append("estado", regQuery);
+        
+        Document orden = new Document();
+        orden.append("fechaTermino", -1);
+        
+        FindIterable<Document> iterable = baseDatos.getCollection("Tarea").find(findQuery).sort(orden);
         MongoCursor<Document> cursor = iterable.iterator();
         
         while (cursor.hasNext()) {
