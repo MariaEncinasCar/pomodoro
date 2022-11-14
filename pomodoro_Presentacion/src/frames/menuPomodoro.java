@@ -258,10 +258,10 @@ public class menuPomodoro extends javax.swing.JFrame {
                     btnPausa.setEnabled(true);
                     btnReiniciar.setEnabled(true);
                     btnIniciar.setEnabled(true);
-                    int res = JOptionPane.showOptionDialog(new JFrame(), "Su tarea ha concluido, ¿desea omitir su descanso?", "Notificación de descanso",
-                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
-                    if (res == JOptionPane.YES_OPTION) {
+//                    int res = JOptionPane.showOptionDialog(new JFrame(), "Su tarea ha concluido, ¿desea omitir su descanso?", "Notificación de descanso",
+//                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+//                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+//                    if (res == JOptionPane.YES_OPTION) {
 //                        System.out.println("Cambiando estado a omitido");
 //                        btnIniciar.setEnabled(false);
 //                        getToolkit().beep();
@@ -272,7 +272,7 @@ public class menuPomodoro extends javax.swing.JFrame {
 //                        noDescanso--;
 //                        this.tiempoPomodoro();
 //                        noPomodoros.setText(Integer.toString(noDescanso));
-                    }else
+//                    }else
                     noPomodoros.setText(this.verificarDescanso());
                     actualizarLabel();
         }
