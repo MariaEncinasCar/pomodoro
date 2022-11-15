@@ -589,7 +589,7 @@ public class menuPomodoro extends javax.swing.JFrame {
             
             if (estado.equalsIgnoreCase("En progreso")) {
                 btnIniciar.setEnabled(true);
-                btnPausa.setEnabled(true);
+                btnPausa.setEnabled(false);
                 btnReiniciar.setEnabled(true);
                 lblBombre.setText("Trabajando en " + nombre);
             } else {
