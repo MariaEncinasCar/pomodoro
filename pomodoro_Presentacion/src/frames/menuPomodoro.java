@@ -256,7 +256,8 @@ public class menuPomodoro extends javax.swing.JFrame {
     private void limiteTimer() {
         if (etiquetaTiempo.getText().equalsIgnoreCase("00:05:00") && pomodoroActivo) {
             getToolkit().beep();
-            JOptionPane.showMessageDialog(null, "Su tarea está a punto de concluir");
+        //JOptionPane.showMessageDialog(null, "Su tarea está a punto de concluir");
+            jTarea.setText("Su tarea está a punto de concluir");
                     if (etiquetaTiempo.getText().equalsIgnoreCase("00:00:00") && pomodoroActivo) {
         //            int res = JOptionPane.showOptionDialog(new JFrame(), "Tu tarea ha finalizado, ¿deseas marcarla como finalizada?", "Notificación de tarea",
         //                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
@@ -271,6 +272,7 @@ public class menuPomodoro extends javax.swing.JFrame {
                     //if (t.isRunning()) {
                         //        t.stop();
                          //   }
+                            jTarea.setText("");
                             btnPausa.setEnabled(true);
                             btnReiniciar.setEnabled(true);
                             btnIniciar.setEnabled(true);
@@ -283,6 +285,7 @@ public class menuPomodoro extends javax.swing.JFrame {
                     btnPausa.setEnabled(true);
                     btnReiniciar.setEnabled(true);
                     btnIniciar.setEnabled(true);
+                    jTarea.setText("");
 //                    int res = JOptionPane.showOptionDialog(new JFrame(), "Su tarea ha concluido, ¿desea omitir su descanso?", "Notificación de descanso",
 //                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
 //                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
@@ -342,6 +345,7 @@ public class menuPomodoro extends javax.swing.JFrame {
 
         jLabel3 = new javax.swing.JLabel();
         txtActividad = new javax.swing.JTextField();
+        jTarea = new javax.swing.JLabel();
         btnReiniciar = new javax.swing.JButton();
         btnGuardar = new javax.swing.JButton();
         btnPausa = new javax.swing.JButton();
@@ -377,6 +381,11 @@ public class menuPomodoro extends javax.swing.JFrame {
             }
         });
         getContentPane().add(txtActividad, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 560, 300, 50));
+
+        jTarea.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
+        jTarea.setForeground(new java.awt.Color(255, 0, 0));
+        jTarea.setText(" ");
+        getContentPane().add(jTarea, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 300, -1));
 
         btnReiniciar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnRestablecer.png"))); // NOI18N
         btnReiniciar.setToolTipText("Reiniciar");
@@ -418,13 +427,13 @@ public class menuPomodoro extends javax.swing.JFrame {
         });
         getContentPane().add(btnPausa, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 540, -1, -1));
 
-        lblBombre.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
+        lblBombre.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         lblBombre.setText("Trabajando en...");
-        getContentPane().add(lblBombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 50, 390, -1));
+        getContentPane().add(lblBombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 60, 390, -1));
 
-        jLabel5.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         jLabel5.setText("Pomodoros para descanso largo:");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 20, 410, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 40, 300, -1));
 
         tablaConsulta.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 14)); // NOI18N
         tablaConsulta.setModel(new javax.swing.table.DefaultTableModel(
@@ -445,9 +454,9 @@ public class menuPomodoro extends javax.swing.JFrame {
 
         getContentPane().add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 130, 460, 370));
 
-        noPomodoros.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 24)); // NOI18N
+        noPomodoros.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 18)); // NOI18N
         noPomodoros.setText("4");
-        getContentPane().add(noPomodoros, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, 40, 30));
+        getContentPane().add(noPomodoros, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 40, 40, 20));
 
         btnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnModificar.png"))); // NOI18N
         btnModificar.setContentAreaFilled(false);
@@ -747,6 +756,7 @@ public class menuPomodoro extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel jTarea;
     private javax.swing.JLabel lblBombre;
     private javax.swing.JLabel noPomodoros;
     private javax.swing.JTable tablaConsulta;
