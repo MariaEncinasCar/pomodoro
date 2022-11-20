@@ -10,9 +10,13 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -23,7 +27,6 @@ import javax.swing.table.TableModel;
 import objetos.Tarea;
 import negocio.CtrlTarea;
 import negocio.FabricaNegocios;
-
 /**
  *
  * @author Arguello, Encinas, García
@@ -43,14 +46,30 @@ public class menuPomodoro extends javax.swing.JFrame {
     private ArrayList<Tarea> ordenPendientes = (ArrayList<Tarea>) ctrlTarea.buscarEstado("Pendiente");
     private Tarea objTarea;
     public String trabajo = "";
-            
+    private Clip clip; 
+
     public menuPomodoro() {
         initComponents();
         t = new Timer(10, acciones);
         actualizaTabla(listaTareas);
         setLocationRelativeTo(this);
     }
-    
+    public void playsound(){
+        try {
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("src/alarma.wav"));
+            clip = AudioSystem.getClip( );
+            clip.open(audioInputStream);
+            clip.start();    
+            clip.loop(Clip.LOOP_CONTINUOUSLY);   
+            }
+            catch(Exception e)  {
+                e.printStackTrace( );
+            }
+    }
+
+     public void dummyMethod(){
+        clip.stop();
+     }
     /**
      * Método que actualiza la tabla.
      */
@@ -161,17 +180,23 @@ public class menuPomodoro extends javax.swing.JFrame {
         if (noDescanso == 0) {
             noDescanso = 4;
             noPomodoro = 4;
+            playsound();
             while (descanso) {
-                if (JOptionPane.showConfirmDialog(null, "¿Desea omitir el descanso largo?", "Iniciar descanso largo",
-                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                int res = JOptionPane.showOptionDialog(new JFrame(), "¿Desea omitir el descanso largo?", "Iniciar descanso largo",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+                if (res ==  JOptionPane.YES_OPTION) {
+                    dummyMethod();
                     // yes option
-                    if (JOptionPane.showConfirmDialog(null, "¿Esta seguro de omitir el descanso largo?", 
-                        "Omitir descanso largo", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    int res2 = JOptionPane.showOptionDialog(new JFrame(), "¿Esta seguro de omitir el descanso largo?", "Confirmación" ,
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+                    if (res2 == JOptionPane.YES_OPTION) {
                         break;
                     }
                 }
                 else {
-                    // no option
+                    dummyMethod();
                     JOptionPane.showMessageDialog(null, "Iniciar descanso largo");
                     pomodoroActivo = false;
                     descansoLargoActivo = true;
@@ -183,17 +208,22 @@ public class menuPomodoro extends javax.swing.JFrame {
         else if (noPomodoro > noDescanso) {
             noPomodoro--;
             getToolkit().beep();
+            playsound();
             while (descanso) {
-                if (JOptionPane.showConfirmDialog(null, "¿Desea omitir el descanso?", "Iniciar descanso",
-                    JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
-                    // yes option
-                    if (JOptionPane.showConfirmDialog(null, "¿Esta seguro de omitir el descanso?", 
-                        "Omitir descanso", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                int res = JOptionPane.showOptionDialog(new JFrame(), "¿Desea omitir el descanso?", "Iniciar descanso",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+                if (res == JOptionPane.YES_OPTION) {
+                    dummyMethod();
+                    int res2 = JOptionPane.showOptionDialog(new JFrame(), "¿Esta seguro de omitir el descanso?", "Confirmación" ,
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+                    if (res2 == JOptionPane.YES_OPTION) {
                         break;
                     }
                 }
                 else {
-                    // no option
+                    dummyMethod();
                     JOptionPane.showMessageDialog(null, "Iniciar descanso");
                     pomodoroActivo = false;
                     descansoActivo = true;
@@ -247,7 +277,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         }
 
     };
-
+   
     private void actualizarLabel() {
         String tiempo = (m <= 9 ? "0" : "") + m + ":" + (s <= 9 ? "0" : "") + s + ":" + (cs <= 9 ? "0" : "") + cs;
         etiquetaTiempo.setText(tiempo);
@@ -259,19 +289,6 @@ public class menuPomodoro extends javax.swing.JFrame {
         //JOptionPane.showMessageDialog(null, "Su tarea está a punto de concluir");
             jTarea.setText("Su tarea está a punto de concluir");
                     if (etiquetaTiempo.getText().equalsIgnoreCase("00:00:00") && pomodoroActivo) {
-        //            int res = JOptionPane.showOptionDialog(new JFrame(), "Tu tarea ha finalizado, ¿deseas marcarla como finalizada?", "Notificación de tarea",
-        //                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-        //                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
-        //            if (res == JOptionPane.YES_OPTION) {
-        //                System.out.println("Cambiando estado a finalizado");
-        //            } else if (res == JOptionPane.NO_OPTION) {
-        //                System.out.println("Dejando estado en pendientes");
-        //            } else if (res == JOptionPane.CLOSED_OPTION) {
-        //                System.out.println("pq cerró y no contestó la pregunta q grosero e");
-        //            }
-                    //if (t.isRunning()) {
-                        //        t.stop();
-                         //   }
                             jTarea.setText("");
                             btnPausa.setEnabled(true);
                             btnReiniciar.setEnabled(true);
@@ -286,21 +303,6 @@ public class menuPomodoro extends javax.swing.JFrame {
                     btnReiniciar.setEnabled(true);
                     btnIniciar.setEnabled(true);
                     jTarea.setText("");
-//                    int res = JOptionPane.showOptionDialog(new JFrame(), "Su tarea ha concluido, ¿desea omitir su descanso?", "Notificación de descanso",
-//                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-//                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
-//                    if (res == JOptionPane.YES_OPTION) {
-//                        System.out.println("Cambiando estado a omitido");
-//                        btnIniciar.setEnabled(false);
-//                        getToolkit().beep();
-//                        JOptionPane.showMessageDialog(null, "Iniciar pomodoro");
-//                        pomodoroActivo = true;
-//                        descansoActivo = false;
-//                        descansoLargoActivo = false;
-//                        noDescanso--;
-//                        this.tiempoPomodoro();
-//                        noPomodoros.setText(Integer.toString(noDescanso));
-//                    }else
                     noPomodoros.setText(this.verificarDescanso());
                     actualizarLabel();
         }
@@ -599,7 +601,7 @@ public class menuPomodoro extends javax.swing.JFrame {
             if (estado.equalsIgnoreCase("En progreso")) {
                 btnIniciar.setEnabled(true);
                 btnPausa.setEnabled(false);
-                btnReiniciar.setEnabled(true);
+                btnReiniciar.setEnabled(false);
                 lblBombre.setText("Trabajando en " + nombre);
             } else {
                 btnIniciar.setEnabled(false);
