@@ -43,7 +43,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         private Timer t;
     private int m = 0, s = 20, cs = 69, noPomodoro = 4, noDescanso = 3;
     private boolean pomodoroActivo = true, descansoActivo = false, descansoLargoActivo = false;
-    private ArrayList<Tarea> ordenPendientes = (ArrayList<Tarea>) ctrlTarea.buscarEstado("Pendiente");
+    public ArrayList<Tarea> ordenPendientes = (ArrayList<Tarea>) ctrlTarea.buscarEstado("Pendiente");
     private Tarea objTarea;
     public String trabajo = "";
     private Clip clip; 
@@ -51,6 +51,7 @@ public class menuPomodoro extends javax.swing.JFrame {
     public menuPomodoro() {
         initComponents();
         t = new Timer(10, acciones);
+        btnModificar.setEnabled(false);
         actualizaTabla(listaTareas);
         setLocationRelativeTo(this);
     }
@@ -130,7 +131,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         tablaConsulta.setModel(modelo);
     }
 
-    private boolean verificarDato() {
+    public boolean verificarDato() {
         String tarea = txtActividad.getText();
         if (!tarea.isEmpty() && estado.equalsIgnoreCase("Pendiente")) {
             return true;
@@ -138,7 +139,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         return false;
     }
     
-    private boolean verificarTarea(Tarea actividad){
+    public boolean verificarTarea(Tarea actividad){
         ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
         if (lista == null) {
             return true;
@@ -152,7 +153,7 @@ public class menuPomodoro extends javax.swing.JFrame {
         return true;
     }
 
-    private void guardar() {
+    public void guardar() {
         String tarea = txtActividad.getText();
         if (verificarDato()) {
             Tarea actividad = new Tarea(tarea, estado);
@@ -174,7 +175,7 @@ public class menuPomodoro extends javax.swing.JFrame {
      * Método para verificar la cantidad de pomodoros y descansos.
      * @return El número de pomodoros para el descanso más largo.
      */
-    private String verificarDescanso() {
+    public String verificarDescanso() {
         boolean descanso = true;
         btnIniciar.setEnabled(false);
         if (noDescanso == 0) {
@@ -242,25 +243,25 @@ public class menuPomodoro extends javax.swing.JFrame {
         return Integer.toString(noPomodoro);
     }
     
-    private void tiempoPomodoro() {
+    public void tiempoPomodoro() {
         m = 0;
         s = 20;
         cs = 0;
     }
     
-    private void tiempoDescansoLargo() {
+    public void tiempoDescansoLargo() {
         m = 0;
         s = 10;
         cs = 0;
     }
     
-    private void tiempoDescanso() {
+    public void tiempoDescanso() {
         m = 0;
         s = 5;
         cs = 0;
     }
     
-    private ActionListener acciones = new ActionListener() {
+    public ActionListener acciones = new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent ae) {
             --cs;
@@ -278,12 +279,12 @@ public class menuPomodoro extends javax.swing.JFrame {
 
     };
    
-    private void actualizarLabel() {
+    public void actualizarLabel() {
         String tiempo = (m <= 9 ? "0" : "") + m + ":" + (s <= 9 ? "0" : "") + s + ":" + (cs <= 9 ? "0" : "") + cs;
         etiquetaTiempo.setText(tiempo);
     }
 
-    private void limiteTimer() {
+    public void limiteTimer() {
         if (etiquetaTiempo.getText().equalsIgnoreCase("00:05:00") && pomodoroActivo) {
             getToolkit().beep();
         //JOptionPane.showMessageDialog(null, "Su tarea está a punto de concluir");
@@ -628,29 +629,35 @@ public class menuPomodoro extends javax.swing.JFrame {
                 
                 ArrayList<Tarea> listaT = (ArrayList<Tarea>) ctrlTarea.consultar();
                 
-                for (int i = 0; i < ordenPendientes.size(); i++) {
-                    for (int j = 0; j < listaT.size(); j++) {
-                        if (ordenPendientes.get(i).getNombre_desc().equalsIgnoreCase(listaT.get(j).getNombre_desc()) 
-                                && !listaT.get(j).getEstado().equalsIgnoreCase("Pendiente")){
-                            ordenPendientes.remove(i);
-                        }
+                for (Tarea a : ordenPendientes) {
+                    if(!listaT.contains(a)){
+                        ordenPendientes.remove(a);
+                    }
+                }
+                
+                for (Tarea a : listaT) {
+                    if(ordenPendientes.contains(a)&& !a.getEstado().equalsIgnoreCase("Pendiente")){
+                        ordenPendientes.remove(a);
                     }
                 }
                 
                 actualizaTabla(ordenPendientes);
                 btnArriba.setEnabled(true);
                 btnAbajo.setEnabled(true);
+                btnModificar.setEnabled(true);
                 
             } else if (buscarEstado.equalsIgnoreCase("Terminada")) {
                 ArrayList<Tarea> listaT = (ArrayList<Tarea>) ctrlTarea.buscarTerminado();
                 actualizaTabla(listaT);
                 btnArriba.setEnabled(false);
                 btnAbajo.setEnabled(false);
+                btnModificar.setEnabled(false);
             } else {
                 ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.buscarEstado("En progreso");
                 actualizaTabla(lista);
                 btnArriba.setEnabled(false);
                 btnAbajo.setEnabled(false);
+                btnModificar.setEnabled(true);
             }
         }
         else{

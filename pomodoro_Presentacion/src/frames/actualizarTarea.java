@@ -71,6 +71,25 @@ public class actualizarTarea extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null, "Tarea actualizada de forma exitosa");
         
     }
+    
+    public boolean verificarTarea(Tarea actividad){
+        ArrayList<Tarea> lista = (ArrayList<Tarea>) ctrlTarea.consultar();
+        if (lista == null) {
+            return true;
+        } else {
+            for (Tarea a : lista) {
+                if (!a.getId().equals(tarea.getId()) && a.getNombre_desc().equalsIgnoreCase(actividad.getNombre_desc())){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    public void eliminar() {
+        ctrlTarea.eliminar(tarea);
+        JOptionPane.showMessageDialog(null, "Tarea eliminada");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -86,7 +105,7 @@ public class actualizarTarea extends javax.swing.JFrame {
         btnAceptar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         btnCancelar = new javax.swing.JButton();
-        btnCancelar1 = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
@@ -137,16 +156,16 @@ public class actualizarTarea extends javax.swing.JFrame {
         });
         getContentPane().add(btnCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 230, 120, -1));
 
-        btnCancelar1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnEliminar.png"))); // NOI18N
-        btnCancelar1.setContentAreaFilled(false);
-        btnCancelar1.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnEliminar2.png"))); // NOI18N
-        btnCancelar1.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnEliminar2.png"))); // NOI18N
-        btnCancelar1.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnEliminar.png"))); // NOI18N
+        btnEliminar.setContentAreaFilled(false);
+        btnEliminar.setPressedIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnEliminar2.png"))); // NOI18N
+        btnEliminar.setRolloverIcon(new javax.swing.ImageIcon(getClass().getResource("/imagenes/btnEliminar2.png"))); // NOI18N
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCancelar1ActionPerformed(evt);
+                btnEliminarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCancelar1, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 230, 130, 50));
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 230, 130, 50));
 
         jLabel2.setFont(new java.awt.Font("Arial Rounded MT Bold", 0, 12)); // NOI18N
         jLabel2.setText("Estado");
@@ -163,18 +182,24 @@ public class actualizarTarea extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAceptarActionPerformed
-
-        int res = JOptionPane.showOptionDialog(new JFrame(), "¿Deseas actualizar tu tarea?", "Notificación de tarea",
-                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
-                new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
-        if (res == JOptionPane.YES_OPTION) {
-            System.out.println("Actualizando tarea");
-            actualizar();
-        } else if (res == JOptionPane.NO_OPTION) {
-            System.out.println("No actualizar tarea");
-        } else if (res == JOptionPane.CLOSED_OPTION) {
-            System.out.println("No contestó");
-        }  
+        Tarea t = new Tarea();
+        t.setNombre_desc(txtNombre.getText());
+        t.setEstado(cbEstado.getSelectedItem().toString());
+        if (verificarTarea(t)) {
+            int res = JOptionPane.showOptionDialog(new JFrame(), "¿Deseas actualizar tu tarea?", "Notificación de tarea",
+                    JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                    new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+            if (res == JOptionPane.YES_OPTION) {
+                System.out.println("Actualizando tarea");
+                actualizar();
+            } else if (res == JOptionPane.NO_OPTION) {
+                System.out.println("No actualizar tarea");
+            } else if (res == JOptionPane.CLOSED_OPTION) {
+                System.out.println("No contestó");
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "El nombre de la tarea ya existe");
+        }
     }//GEN-LAST:event_btnAceptarActionPerformed
 
     private void txtNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyTyped
@@ -189,15 +214,25 @@ public class actualizarTarea extends javax.swing.JFrame {
         dispose();
     }//GEN-LAST:event_btnCancelarActionPerformed
 
-    private void btnCancelar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelar1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnCancelar1ActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        int res = JOptionPane.showOptionDialog(new JFrame(), "¿Deseas eliminar tu tarea?", "Notificación de tarea",
+                JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+                new Object[]{"Sí", "No"}, JOptionPane.YES_OPTION);
+        if (res == JOptionPane.YES_OPTION) {
+            System.out.println("Eliminando tarea");
+            eliminar();
+        } else if (res == JOptionPane.NO_OPTION) {
+            System.out.println("No elimina tarea");
+        } else if (res == JOptionPane.CLOSED_OPTION) {
+            System.out.println("No contestó");
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAceptar;
     private javax.swing.JButton btnCancelar;
-    private javax.swing.JButton btnCancelar1;
+    private javax.swing.JButton btnEliminar;
     private javax.swing.JComboBox<String> cbEstado;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
