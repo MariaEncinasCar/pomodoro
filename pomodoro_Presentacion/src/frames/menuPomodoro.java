@@ -670,6 +670,7 @@ public class menuPomodoro extends javax.swing.JFrame {
             actualizaTabla(lista);
             btnArriba.setEnabled(false);
             btnAbajo.setEnabled(false);
+            btnModificar.setEnabled(false);
         }
     }//GEN-LAST:event_dropBusquedaActionPerformed
 
