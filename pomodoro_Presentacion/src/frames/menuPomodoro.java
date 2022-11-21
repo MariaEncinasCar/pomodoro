@@ -234,7 +234,12 @@ public class menuPomodoro extends javax.swing.JFrame {
             }
         }
         getToolkit().beep();
-        JOptionPane.showMessageDialog(null, "Iniciar pomodoro");
+        playsound();
+        int exit = JOptionPane.showConfirmDialog(null, "Iniciar pomodoro" , "Pomodoro", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE);
+        if (exit == JOptionPane.OK_OPTION || exit == JOptionPane.CANCEL_OPTION)
+        {
+            dummyMethod();
+        }
         pomodoroActivo = true;
         descansoActivo = false;
         descansoLargoActivo = false;
